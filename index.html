@@ -1054,11 +1054,11 @@
 
         <form>
 
-          <input type="text" placeholder="Your Name" required>
+          <input type="text" name="name" placeholder="Your Name" required>
 
-          <input type="tel" placeholder="Phone Number" required>
+          <input type="tel" name="phone" placeholder="Phone Number" required>
 
-          <select required>
+          <select name="area" required>
 
             <option>Select Area</option>
             <option>Kadri</option>
@@ -1068,7 +1068,7 @@
 
           </select>
 
-          <select required>
+          <select name="property_type" required>
 
             <option>Property Type</option>
             <option>Home</option>
@@ -1078,7 +1078,7 @@
 
           </select>
 
-          <textarea placeholder="Tell us your requirement"></textarea>
+          <textarea name="requirement" placeholder="Tell us your requirement"></textarea>
 
           <button class="btn btn-primary">
             Submit Inquiry
@@ -1199,7 +1199,58 @@
   <a href="https://wa.me/919110619419" class="whatsapp-float">
     WhatsApp Us
   </a>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
+<script>
+
+const SUPABASE_URL = "YOUR_PROJECT_URL"
+
+const SUPABASE_ANON_KEY = "YOUR_PUBLISHABLE_KEY"
+
+const client = supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
+)
+
+const form = document.querySelector("form")
+
+form.addEventListener("submit", async (e) => {
+
+  e.preventDefault()
+
+  const formData = new FormData(form)
+
+  const data = {
+
+    name: formData.get("name"),
+    phone: formData.get("phone"),
+    area: formData.get("area"),
+    property_type: formData.get("property_type"),
+    requirement: formData.get("requirement")
+
+  }
+
+  const { error } = await client
+    .from("leads")
+    .insert([data])
+
+  if(error){
+
+    console.log(error)
+
+    alert("Something went wrong.")
+
+  } else {
+
+    alert("Inquiry submitted successfully!")
+
+    form.reset()
+
+  }
+
+})
+
+</script>
 </body>
 
 </html>
